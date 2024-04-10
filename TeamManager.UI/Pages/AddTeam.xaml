@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TeamManager.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="models:AddTeamViewModel"
+             x:Class="TeamManager.UI.Pages.AddTeam"
+             Title="Add team">
+    <VerticalStackLayout Spacing="50" Margin="20, 0, 20, 0">
+        <VerticalStackLayout Spacing="20">
+            <VerticalStackLayout>
+                <Entry Text="{Binding TeamName}" Placeholder="Enter team name" HorizontalTextAlignment="Center"/>
+                <Label Text="Team name" HorizontalTextAlignment="End" FontSize="Caption" Opacity="0.6"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Entry Text="{Binding Country}" Placeholder="Enter team country" HorizontalTextAlignment="Center"/>
+                <Label Text="Team country" HorizontalTextAlignment="End" FontSize="Caption" Opacity="0.6"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                    <DatePicker Date="{Binding CreatedDate}" Format="0:dd-MM-yyyy"
+                            MaximumDate="{Binding MaximumDate}" HorizontalOptions="CenterAndExpand"/>
+                    <Label Text="The date the team was created" FontSize="Caption" 
+                           HorizontalTextAlignment="Center" Opacity="0.6"/>
+                </VerticalStackLayout>
+        </VerticalStackLayout>
+        <Button Text="Add team" Pressed="Button_Pressed" IsEnabled="{Binding IsReady}">
+            <Button.Behaviors>
+                <toolkit:EventToCommandBehavior EventName="Pressed"
+                            Command="{Binding AddTeamCommand}"/>
+            </Button.Behaviors>
+        </Button>
+    </VerticalStackLayout>
+</ContentPage>

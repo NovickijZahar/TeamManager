@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TeamManager.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="models:EditPlayerViewModel"
+             x:Class="TeamManager.UI.Pages.EditPlayer"
+             Title="Edit information">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+                Command="{Binding UpdateGroupListCommand}"/>
+    </ContentPage.Behaviors>
+    <VerticalStackLayout Margin="15, 0, 15, 0">
+        <Grid RowDefinitions="*, *, *" ColumnDefinitions="*, *">
+            <Label Text="Country: " 
+                Grid.Row="0" Grid.Column="0"
+                VerticalTextAlignment="Center"/>
+            <Entry Text="{Binding Country}"
+                Grid.Row="0" Grid.Column="1"
+                HorizontalTextAlignment="End"/>
+            <Label Text="Points(0-100): " 
+                    Grid.Row="1" Grid.Column="0"
+                    VerticalTextAlignment="Center"/>
+            <Entry Text="{Binding Points}"
+                    Grid.Row="1" Grid.Column="1"
+                    HorizontalTextAlignment="End"
+                    Keyboard="Numeric"/>
+            <Label Text="Team: " 
+                   Grid.Row="2" Grid.Column="0"
+                   VerticalTextAlignment="Center"/>
+            <Picker HorizontalTextAlignment="End"
+                    ItemsSource="{Binding Teams}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedTeam}"
+                    Grid.Row="2" Grid.Column="1"/>
+        </Grid>
+        <Button Text="Save changes" Pressed="Button_Pressed" IsEnabled="{Binding IsReady}">
+            <Button.Behaviors>
+                <toolkit:EventToCommandBehavior EventName="Pressed"
+                        Command="{Binding UpdateMemberCommand}"/>
+            </Button.Behaviors>
+        </Button>
+    </VerticalStackLayout>
+</ContentPage>

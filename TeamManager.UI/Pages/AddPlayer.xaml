@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TeamManager.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converter="clr-namespace:TeamManager.UI.ValueConverter"
+             x:DataType="models:AddPlayerViewModel"
+             x:Class="TeamManager.UI.Pages.AddPlayer"
+             Title="Add player">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+                    Command="{Binding UpdateGroupListCommand}"/>
+    </ContentPage.Behaviors>
+    <VerticalStackLayout Spacing="50" Margin="20, 0, 20, 0">
+        <VerticalStackLayout Spacing="20">
+            <VerticalStackLayout>
+                <Entry Text="{Binding PlayerName}" Placeholder="Enter player name" 
+                   HorizontalTextAlignment="Center"/>
+                <Label Text="Player name" FontSize="Caption"
+                       HorizontalTextAlignment="End" Opacity="0.6"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                    <DatePicker Date="{Binding DateOfBirth}" Grid.Column="1" Format="0:dd-MM-yyyy"
+                            MaximumDate="{Binding MaximumDate}" HorizontalOptions="EndAndExpand"/>
+                <Label Text="The player's birthday" FontSize="Caption" 
+                       HorizontalTextAlignment="End" Opacity="0.6"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Entry Text="{Binding Country}" Placeholder="Enter player country" 
+                   HorizontalTextAlignment="Center"/>
+                <Label Text="Player country" FontSize="Caption" 
+                       HorizontalTextAlignment="End" Opacity="0.6"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Entry Text="{Binding Points}" Placeholder="Enter player points(0-100)" 
+                   HorizontalTextAlignment="Center" Keyboard="Numeric"/>
+                <Label Text="Player points" FontSize="Caption" 
+                       HorizontalTextAlignment="End" Opacity="0.6"/>
+            </VerticalStackLayout>
+            <Grid ColumnDefinitions="*, auto">
+                <Label Text="Choose the team: " Grid.Column="0"
+                       VerticalTextAlignment="Center"/>
+                <Picker HorizontalTextAlignment="Center"
+                        ItemsSource="{Binding Teams}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedTeam}"
+                        Grid.Column="1"/>
+            </Grid>
+        </VerticalStackLayout>
+            <Button Text="Add player" Pressed="Button_Pressed" IsEnabled="{Binding IsReady}">
+                <Button.Behaviors>
+                    <toolkit:EventToCommandBehavior EventName="Pressed"
+                                    Command="{Binding AddPlayerCommand}"/>
+                </Button.Behaviors>
+            </Button>
+    </VerticalStackLayout>
+</ContentPage>

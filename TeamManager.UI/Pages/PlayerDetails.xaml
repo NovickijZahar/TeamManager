@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TeamManager.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converter="clr-namespace:TeamManager.UI.ValueConverter"
+             x:DataType="models:PlayerDetailsViewModel"
+             x:Class="TeamManager.UI.Pages.PlayerDetails"
+             Title="{Binding Player.PersonalData.Name}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:IdToImageSourceValueConverter x:Key="IdToImageSource"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="trash.png"
+                     Text="Delete photo"
+                     Command="{Binding DeletePhotoCommand}"/>
+        <ToolbarItem IconImageSource="plus.png" 
+                     Text="Add photo"
+                     Command="{Binding AddPhotoCommand}"/>
+        <ToolbarItem Text="Edit information" Order="Primary"
+                     Command="{Binding 
+                     Source={RelativeSource
+                     AncestorType={x:Type models:PlayerDetailsViewModel} },
+                     Path=ShowEditPlayerCommand}"
+                     CommandParameter="{Binding Player}"
+                     IconImageSource="edit.png"/>
+    </ContentPage.ToolbarItems>
+    <VerticalStackLayout Margin="15, 0, 15, 0">
+        <Grid RowDefinitions="*, *, *, *, *, *, *" ColumnDefinitions="*, auto">
+            <Label Text="Name: " 
+                   Grid.Row="0" Grid.Column="0"/>
+            <Label Text="{Binding Player.PersonalData.Name}"
+                   Grid.Row="0" Grid.Column="1"
+                   HorizontalTextAlignment="End"/>
+            <Label Text="Date of Birth: " 
+                   Grid.Row="1" Grid.Column="0"/>
+            <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                <Label Text="{Binding Player.PersonalData.DateOfBirth, StringFormat='{0:dd.MM.yyyy}'}"
+                       HorizontalTextAlignment="End"/>
+                <Label Text="("/>
+                <Label Text="{Binding Age}"/>
+                <Label Text=" years)"/>
+            </HorizontalStackLayout>
+            <Label Text="Country: " 
+                   Grid.Row="2" Grid.Column="0"/>
+            <Label Text="{Binding Player.Country}"
+                   Grid.Row="2" Grid.Column="1"
+                   HorizontalTextAlignment="End"/>
+            <Label Text="Points: " 
+                   Grid.Row="3" Grid.Column="0"/>
+            <Label Text="{Binding Player.Points}"
+                   Grid.Row="3" Grid.Column="1"
+                   HorizontalTextAlignment="End"/>
+            <Label Text="Team: "
+                   Grid.Row="4" Grid.Column="0"/>
+            <Label Text="{Binding TeamName}"
+                   Grid.Row="4" Grid.Column="1"
+                   HorizontalTextAlignment="End"/>
+            <Image Source="{Binding Id, Converter={StaticResource IdToImageSource}}"
+                   HeightRequest="250"
+                   Aspect="AspectFit"
+                   Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+            </Image>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TeamManager.UI.ViewModels"
+             xmlns:converter="clr-namespace:TeamManager.UI.ValueConverter"
+             xmlns:local="clr-namespace:TeamManager.Domain.Entities;assembly=TeamManager.Domain"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="models:TeamsViewModel"
+             x:Class="TeamManager.UI.Pages.Teams"
+             Title="Teams">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+                                        Command="{Binding UpdateGroupListCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                Command="{Binding UpdateGroupListCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Loaded"
+                                Command="{Binding UpdateMemberListCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                        Command="{Binding UpdateMemberListCommand}"/>
+    </ContentPage.Behaviors>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add player" Order="Secondary" 
+                     Command="{Binding 
+                     Source={RelativeSource
+                     AncestorType={x:Type models:TeamsViewModel} },
+                     Path=ShowAddPlayerCommand}"/>
+        <ToolbarItem Text="Add team" Order="Secondary" 
+                     Command="{Binding 
+                     Source={RelativeSource
+                     AncestorType={x:Type models:TeamsViewModel} },
+                     Path=ShowAddTeamCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:PointsToColorValueConverter x:Key="PointsToColor"/>
+            <converter:IdToImageSourceValueConverter x:Key="IdToImageSource"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout>
+            <Picker HorizontalTextAlignment="Center"
+                    ItemsSource="{Binding Teams}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedTeam}">
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                    Command="{Binding UpdateMemberListCommand}"/>
+                </Picker.Behaviors>
+            </Picker>
+            <Grid RowDefinitions="*, *" ColumnDefinitions="*, Auto">
+                <Label Text="Country" Grid.Row="0" Grid.Column="0"/>
+                <Label Text="{Binding SelectedTeam.Country}" 
+                       HorizontalTextAlignment="End"
+                       Grid.Row="0" Grid.Column="1"/>
+                <Label Text="Created Date" Grid.Row="1" Grid.Column="0"/>
+                <Label Text="{Binding SelectedTeam.CreatedDate, StringFormat='{0:dd.MM.yyyy}'}" 
+                       HorizontalTextAlignment="End"
+                       Grid.Row="1" Grid.Column="1"/>
+            </Grid>
+            <CollectionView ItemsSource="{Binding Players}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="3"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Player">
+                        <Border BackgroundColor="{Binding Points, Converter={StaticResource PointsToColor}}"
+                                   StrokeShape="RoundRectangle 50,50,50,50">
+                            <HorizontalStackLayout Spacing="20">
+                                <Border HeightRequest="100" WidthRequest="100" 
+                                            StrokeShape="RoundRectangle 50,50,50,50">
+                                    <Image Source="{Binding Id, 
+                                               Converter={StaticResource IdToImageSource}}"
+                                               HeightRequest="100"
+                                               WidthRequest="100"
+                                               Aspect="AspectFill"/>
+                                </Border>
+                                <Label Text="{Binding PersonalData.Name}" 
+                                           TextColor="Black"
+                                           VerticalTextAlignment="Center"/>
+                                <HorizontalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding 
+                                                              Source={RelativeSource
+                                                              AncestorType={x:Type models:TeamsViewModel} },
+                                                              Path=ShowDetailsCommand}"
+                                                              CommandParameter="{Binding}"/>
+                                </HorizontalStackLayout.GestureRecognizers>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
